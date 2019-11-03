@@ -4,14 +4,16 @@ using FloralShop.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FloralShop.Migrations
 {
     [DbContext(typeof(FloralShopDbContext))]
-    partial class FloralShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191103162320_all-data")]
+    partial class alldata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
