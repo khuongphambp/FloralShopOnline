@@ -12,7 +12,6 @@ namespace FloralShop.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        public int IDUser { get; set; }
         public User User { get; set; }
         public int Total { get; set; }
         public string Payment { get; set; }

@@ -29,9 +29,6 @@ namespace FloralShop.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IDUser")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
@@ -70,12 +67,6 @@ namespace FloralShop.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IDBill")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IDProduct")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
@@ -100,6 +91,30 @@ namespace FloralShop.Migrations
                     b.ToTable("BillDetails");
                 });
 
+            modelBuilder.Entity("FloralShop.Entity.Department", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("FloralShop.Entity.Product", b =>
                 {
                     b.Property<int>("ID")
@@ -112,9 +127,6 @@ namespace FloralShop.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("IDType")
-                        .HasColumnType("int");
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
@@ -154,6 +166,9 @@ namespace FloralShop.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DepartmentID")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
@@ -164,6 +179,8 @@ namespace FloralShop.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("DepartmentID");
 
                     b.ToTable("TypeProducts");
                 });
@@ -218,6 +235,13 @@ namespace FloralShop.Migrations
                     b.HasOne("FloralShop.Entity.TypeProduct", "TypeProduct")
                         .WithMany("Products")
                         .HasForeignKey("TypeProductID");
+                });
+
+            modelBuilder.Entity("FloralShop.Entity.TypeProduct", b =>
+                {
+                    b.HasOne("FloralShop.Entity.Department", "Department")
+                        .WithMany("TypeProducts")
+                        .HasForeignKey("DepartmentID");
                 });
 #pragma warning restore 612, 618
         }
