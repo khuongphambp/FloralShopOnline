@@ -13,11 +13,12 @@ namespace FloralShop.Entity
         public DbSet<User> Users { get; set; }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<BillDetail> BillDetails { get; set; }
-        public DbSet<Department> Departments { get; set; }
+        public DbSet<Visitor> Visitors { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.;Database=FloralShopDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=.;Database=FloralShop;Trusted_Connection=True;");
         }
     }
 }

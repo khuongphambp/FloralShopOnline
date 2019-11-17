@@ -1,13 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using FloralShop.Models;
+using Microsoft.AspNetCore.Identity;
+using FloralShop.Entity;
 
 namespace FloralShop
 {
@@ -24,6 +26,19 @@ namespace FloralShop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+
+            services.AddDbContext<FloralShopDbContext>();
+
+        
+
+
+
+            services.AddCors();
+
+            services.AddMvc(option => option.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,10 +56,17 @@ namespace FloralShop
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCors(options => 
+                options
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+            );
 
             app.UseRouting();
 
-            app.UseAuthorization();
+         
+
 
             app.UseEndpoints(endpoints =>
             {

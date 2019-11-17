@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FloralShop.Migrations
 {
     [DbContext(typeof(FloralShopDbContext))]
-    [Migration("20191103175155_new-data")]
-    partial class newdata
+    [Migration("20191110154528_Dataa")]
+    partial class Dataa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,12 +46,17 @@ namespace FloralShop.Migrations
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserID")
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisitorID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
                     b.HasIndex("UserID");
+
+                    b.HasIndex("VisitorID");
 
                     b.ToTable("Bills");
                 });
@@ -63,7 +68,7 @@ namespace FloralShop.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BillID")
+                    b.Property<int>("BillID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateTime")
@@ -75,7 +80,7 @@ namespace FloralShop.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductID")
+                    b.Property<int>("ProductID")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -93,7 +98,7 @@ namespace FloralShop.Migrations
                     b.ToTable("BillDetails");
                 });
 
-            modelBuilder.Entity("FloralShop.Entity.Department", b =>
+            modelBuilder.Entity("FloralShop.Entity.Contact", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -103,8 +108,14 @@ namespace FloralShop.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Messenger")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -114,7 +125,7 @@ namespace FloralShop.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("FloralShop.Entity.Product", b =>
@@ -136,13 +147,13 @@ namespace FloralShop.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameProduct")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PromotionPrice")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeProductID")
+                    b.Property<int>("TypeProductID")
                         .HasColumnType("int");
 
                     b.Property<int>("UnitPrice")
@@ -168,21 +179,16 @@ namespace FloralShop.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DepartmentID")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("NameTypeProduct")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("DepartmentID");
 
                     b.ToTable("TypeProducts");
                 });
@@ -200,7 +206,40 @@ namespace FloralShop.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Gender")
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("FloralShop.Entity.Visitor", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -209,41 +248,51 @@ namespace FloralShop.Migrations
                     b.Property<int>("Phone")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Visitors");
                 });
 
             modelBuilder.Entity("FloralShop.Entity.Bill", b =>
                 {
                     b.HasOne("FloralShop.Entity.User", "User")
                         .WithMany("Bills")
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FloralShop.Entity.Visitor", "Visitor")
+                        .WithMany("Bills")
+                        .HasForeignKey("VisitorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FloralShop.Entity.BillDetail", b =>
                 {
                     b.HasOne("FloralShop.Entity.Bill", "Bill")
                         .WithMany("BillDetails")
-                        .HasForeignKey("BillID");
+                        .HasForeignKey("BillID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FloralShop.Entity.Product", "Product")
                         .WithMany("BillDetails")
-                        .HasForeignKey("ProductID");
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FloralShop.Entity.Product", b =>
                 {
                     b.HasOne("FloralShop.Entity.TypeProduct", "TypeProduct")
                         .WithMany("Products")
-                        .HasForeignKey("TypeProductID");
-                });
-
-            modelBuilder.Entity("FloralShop.Entity.TypeProduct", b =>
-                {
-                    b.HasOne("FloralShop.Entity.Department", "Department")
-                        .WithMany("TypeProducts")
-                        .HasForeignKey("DepartmentID");
+                        .HasForeignKey("TypeProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

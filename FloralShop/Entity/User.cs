@@ -13,10 +13,12 @@ namespace FloralShop.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Name { get; set; }
-        public bool Gender { get; set; }
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        public string Gender { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
-        public int Phone { get; set; }
+        public string Addresss { get; set; }
+        public string Phone { get; set; }
         public ICollection<Bill> Bills { get; set; }
     }
 }
